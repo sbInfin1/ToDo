@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ToDo</string>
+    <string name="fab_content_description">add_task</string>
+    <string name="hint_enter_task_title">enter task title</string>
+    <string name="label_new_task_details">Task Details</string>
+    <string name="hint_enter_task_dueTime">enter due time</string>
+</resources>
