@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDo">
-        <activity android:name=".MainActivity"/>
 
         <activity android:name=".tasklist.TaskListActivity">
             <intent-filter>
@@ -19,7 +18,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".addtask.AddTask"/>
+        <activity
+            android:name=".addtask.AddTask"
+            android:theme="@style/Theme.ToDoAddTask"
+            />
     </application>
 
 </manifest>

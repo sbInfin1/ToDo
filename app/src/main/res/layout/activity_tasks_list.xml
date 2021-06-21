@@ -36,9 +36,9 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="16dp"
-                android:background="@color/material_on_primary_emphasis_medium"
                 android:contentDescription="@string/fab_content_description"
-                android:src="@drawable/outline_add_white_48"
+                android:src="@drawable/round_add_white_48"
+                app:maxImageSize="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -53,6 +53,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@android:color/white"
+        app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_view" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
