@@ -29,6 +29,12 @@ interface TaskDatabaseDao {
     fun getAllTasks(): LiveData<List<Task>>
 
     /**
+     * Retrieves all tasks that are in the given Category
+     */
+    @Query("SELECT * FROM task_table WHERE column_category = :category ORDER BY column_priority DESC, column_due_time")
+    fun getTasksInCategory(category: String): LiveData<List<Task>>
+
+    /**
      * Deletes all tuples from the task_table
      */
     @Query("DELETE FROM task_table")

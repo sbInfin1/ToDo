@@ -4,4 +4,5 @@
     <string name="hint_enter_task_title">enter task title</string>
     <string name="label_new_task_details">Task Details</string>
     <string name="hint_enter_task_dueTime">enter due time</string>
+    <string name="hint_category">category</string>
 </resources>

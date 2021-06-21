@@ -17,16 +17,18 @@ class TaskAdapter:
 
         val titleTextView: TextView
         val dueTimeTextView: TextView
+        val categoryTextView: TextView
 
         init {
             titleTextView = view.findViewById(R.id.task_title_textView)
             dueTimeTextView = view.findViewById(R.id.due_time_textView)
+            categoryTextView = view.findViewById(R.id.category_textView)
         }
 
         fun bind(task: Task){
-
             titleTextView.text = task.title
             dueTimeTextView.text = task.dueTime.toString()
+            categoryTextView.text = task.category
         }
     }
 

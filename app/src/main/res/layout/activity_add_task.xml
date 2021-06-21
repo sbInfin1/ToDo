@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/task_dueTime_EditText"
+        android:id="@+id/task_dueTime_editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -40,6 +40,8 @@
         app:layout_constraintStart_toEndOf="@+id/task_details_label_textView"
         app:layout_constraintTop_toBottomOf="@+id/task_title_editText" />
 
+
+
     <Button
         android:id="@+id/done_button"
         android:layout_width="wrap_content"
@@ -49,5 +51,17 @@
         android:text="Done"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task_details_label_textView" />
+
+    <EditText
+        android:id="@+id/task_category_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="@string/hint_category"
+        app:layout_constraintStart_toEndOf="@+id/task_details_label_textView"
+        app:layout_constraintTop_toBottomOf="@+id/task_dueTime_editText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

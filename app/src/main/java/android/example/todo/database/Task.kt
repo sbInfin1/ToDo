@@ -23,5 +23,8 @@ data class Task(
     var remindMeTime: Long = 0L,
 
     @ColumnInfo(name = "column_priority")
-    var priotity: Int = 0
+    var priotity: Int = 0,
+
+    @ColumnInfo(name = "column_category")
+    var category: String = "General"
 )
