@@ -56,4 +56,9 @@ dependencies {
 
     // For viewModelScope
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+
+    // For the outlines EditText fields
+    api 'com.google.android.material:material:1.4.0-rc01'
+
+    //api 'com.google.android.material:material:1.1.0-alpha06'
 }

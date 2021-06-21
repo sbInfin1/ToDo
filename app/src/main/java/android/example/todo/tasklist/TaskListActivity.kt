@@ -45,7 +45,7 @@ class TaskListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // This will display an Up icon, to be replaced with hamburger later
-        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Find the drawerView
         nvDrawer = findViewById(R.id.nvView)
@@ -54,6 +54,17 @@ class TaskListActivity : AppCompatActivity() {
         mDrawer = findViewById(R.id.drawer_layout)
 
         setupDrawerContent(nvDrawer)
+
+        drawerToggle = ActionBarDrawerToggle(this, mDrawer, toolbar,
+            R.string.drawer_open, R.string.drawer_closed)
+
+        // Setup toggle to display hamburger icon with nice animation
+        drawerToggle.isDrawerIndicatorEnabled = true;
+        drawerToggle.syncState();
+
+        // Tie DrawerLayout events to the ActionBarToggle
+        mDrawer.addDrawerListener(drawerToggle);
+
 
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
 
