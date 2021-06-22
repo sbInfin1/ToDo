@@ -70,7 +70,7 @@ class TaskListActivity : AppCompatActivity() {
 
         val dataSource = TaskDatabase.getInstance(this).taskDatabaseDao
 
-        val viewModelFactory = TaskListViewModelFactory(dataSource)
+        val viewModelFactory = TaskListViewModelFactory(application, dataSource)
 
         taskViewModel = ViewModelProvider(this, viewModelFactory)
             .get(TaskListViewModel::class.java)
@@ -106,6 +106,7 @@ class TaskListActivity : AppCompatActivity() {
                 val category = intent.getStringExtra(TASK_CATEGORY)
 
                 taskViewModel.insert(taskTitle, taskDueTime, category)
+                taskViewModel.createNotification(this, taskDueTime, taskTitle)
             }
         }
     }

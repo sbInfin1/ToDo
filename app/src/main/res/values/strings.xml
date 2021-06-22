@@ -9,4 +9,6 @@
     <string name="drawer_open">Drawer open</string>
     <string name="drawer_closed">Drawer closed</string>
     <string name="label_done_button">Done</string>
+    <string name="channel_name">notification_channel</string>
+    <string name="channel_description">This channel is used to display notification</string>
 </resources>
