@@ -2,6 +2,7 @@ package android.example.todo.tasklist
 
 import android.example.todo.R
 import android.example.todo.database.Task
+import android.example.todo.util.DateTimeFormatterUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,7 @@ class TaskAdapter:
 
         fun bind(task: Task){
             titleTextView.text = task.title
-            dueTimeTextView.text = task.dueTime.toString()
+            dueTimeTextView.text = DateTimeFormatterUtils.convertMillisToDateTime(task.dueTime)
             categoryTextView.text = task.category
         }
     }

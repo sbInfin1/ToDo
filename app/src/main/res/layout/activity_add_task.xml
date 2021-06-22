@@ -34,20 +34,39 @@
                     android:hint="@string/hint_enter_task_title" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/task_dueTime_text_input"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                app:startIconDrawable="@drawable/outline_alarm_add_black_24"
+                android:hint="@string/hint_enter_task_dueTime">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/task_dueTime_editText"
+                <AutoCompleteTextView
+                    android:id="@+id/due_time_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:hint="@string/hint_enter_task_dueTime" />
+                    android:inputType="none" />
+
             </com.google.android.material.textfield.TextInputLayout>
+
+
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/task_dueTime_text_input"-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:errorEnabled="true">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:id="@+id/task_dueTime_editText"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:inputType="number"-->
+<!--                    android:hint="@string/hint_enter_task_dueTime" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/task_category_text_input"
