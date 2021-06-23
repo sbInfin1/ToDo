@@ -15,6 +15,8 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -62,7 +64,7 @@ class TaskListActivity : AppCompatActivity() {
         // Find the drawer view
         mDrawer = findViewById(R.id.drawer_layout)
 
-        setupDrawerContent(nvDrawer)
+        //setupDrawerContent(nvDrawer)
 
         drawerToggle = ActionBarDrawerToggle(this, mDrawer, toolbar,
             R.string.drawer_open, R.string.drawer_closed)
@@ -115,6 +117,15 @@ class TaskListActivity : AppCompatActivity() {
         navDrawerAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items)
         val listView: ListView = findViewById<View>(R.id.list_slidermenu) as ListView
         listView.setAdapter(navDrawerAdapter)
+
+        listView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
+            //listView.setSelection(position)
+            //listView.setItemChecked(position, true)
+            //Toast.makeText(this, "Item selected: " + listView.getItemAtPosition(position),
+            //Toast.LENGTH_SHORT).show()
+            mTaskViewModel.setCategory(listView.getItemAtPosition(position).toString())
+            mDrawer.closeDrawers()
+        }
     }
 
     private fun setOnTouchItemHelper(){
