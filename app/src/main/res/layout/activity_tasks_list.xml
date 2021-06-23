@@ -46,14 +46,47 @@
 
     </LinearLayout>
 
-    <!-- The navigation drawer that comes from the left -->
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nvView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@android:color/white"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_view" />
+        app:headerLayout="@layout/nav_header">
+<!--        app:menu="@menu/drawer_view" >-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/nav_header" />
+
+            <ListView
+                android:id="@+id/list_slidermenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:choiceMode="singleChoice"
+                android:textColor="#424242"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_manage_categories"
+            android:text="@string/label_manage_categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"/>
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/button_manage_categories"-->
+<!--            style="@style/Widget.MaterialComponents.Button"-->
+<!--            android:text="@string/label_manage_categories"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="bottom"/>-->
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

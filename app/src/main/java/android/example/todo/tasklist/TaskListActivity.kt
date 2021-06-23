@@ -2,7 +2,6 @@ package android.example.todo.tasklist
 
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Resources
 import android.example.todo.R
 import android.example.todo.addtask.AddTask
 import android.example.todo.addtask.TASK_CATEGORY
@@ -13,10 +12,9 @@ import android.example.todo.database.TaskDatabase
 import android.example.todo.database.TaskDatabaseDao
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +24,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 
 
@@ -45,6 +42,8 @@ class TaskListActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var nvDrawer: NavigationView
     private lateinit var drawerToggle: ActionBarDrawerToggle
+
+    private lateinit var navDrawerAdapter: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,11 +68,11 @@ class TaskListActivity : AppCompatActivity() {
             R.string.drawer_open, R.string.drawer_closed)
 
         // Setup toggle to display hamburger icon with nice animation
-        drawerToggle.isDrawerIndicatorEnabled = true;
-        drawerToggle.syncState();
+        drawerToggle.isDrawerIndicatorEnabled = true
+        drawerToggle.syncState()
 
         // Tie DrawerLayout events to the ActionBarToggle
-        mDrawer.addDrawerListener(drawerToggle);
+        mDrawer.addDrawerListener(drawerToggle)
 
 
         mRecyclerView = findViewById(R.id.recycler_view)
@@ -95,12 +94,27 @@ class TaskListActivity : AppCompatActivity() {
             }
         })
 
+        // Populate the navigation drawer with menus
+        attachAdapterForNavDrawerListView()
+
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener {
             fabOnClick()
         }
 
         setOnTouchItemHelper()
+
+        setOnClickListenerForManageCategories()
+    }
+
+    private fun attachAdapterForNavDrawerListView(){
+        val items: ArrayList<String> = ArrayList<String>()
+        items.add("First")
+        items.add("Second")
+        items.add("Third")
+        navDrawerAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items)
+        val listView: ListView = findViewById<View>(R.id.list_slidermenu) as ListView
+        listView.setAdapter(navDrawerAdapter)
     }
 
     private fun setOnTouchItemHelper(){
@@ -140,6 +154,28 @@ class TaskListActivity : AppCompatActivity() {
                 mTaskAdapter.notifyItemChanged(position);
             }
         }).attachToRecyclerView(mRecyclerView)
+    }
+
+    private fun setOnClickListenerForManageCategories(){
+        val manageCategoriesButton = findViewById<Button>(R.id.button_manage_categories)
+
+        manageCategoriesButton.setOnClickListener {
+            val builder = AlertDialog.Builder(this@TaskListActivity, android.R.style.Theme_Material_Light_Dialog)
+            builder.setTitle("New Category")
+            builder.setMessage("Enter the label of the new category")
+
+            val input = EditText(this@TaskListActivity)
+            builder.setView(input)
+
+            builder.setPositiveButton("Add") { dialog, which ->
+                Toast.makeText(applicationContext, "New category added", Toast.LENGTH_SHORT).show()
+            }
+
+            builder.setNegativeButton("Cancel") { dialog, which ->
+                Toast.makeText(applicationContext, "Category was not added", Toast.LENGTH_SHORT).show()
+            }
+            builder.show()
+        }
     }
 
     private fun fabOnClick() {
@@ -198,6 +234,18 @@ class TaskListActivity : AppCompatActivity() {
         // Updates the tasks liveData variable with the lists in the selected
         // category
         mTaskViewModel.setCategory(category)
+    }
+
+    private fun populateNavDrawer(){
+        val menu = nvDrawer.menu
+
+        menu.add("First")
+        menu.add("Second")
+        menu.add("Third")
+
+//        for (item in mTaskViewModel.categories.value!!) {
+//            menu.add(item)
+//        }
     }
 
 //    private fun setupDrawerContent(navigationView: NavigationView){

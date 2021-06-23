@@ -11,4 +11,5 @@
     <string name="label_done_button">Done</string>
     <string name="channel_name">notification_channel</string>
     <string name="channel_description">This channel is used to display notification</string>
+    <string name="label_manage_categories">Manage categories</string>
 </resources>

@@ -19,15 +19,25 @@ class TaskListViewModel (
 
     private val LOG_TAG = TaskListViewModel::class.qualifiedName
 
-    private val currentCategory = MutableLiveData<String>("all")
+    private val currentCategory = MutableLiveData<String>("All")
     val tasks: LiveData<List<Task>> = Transformations.switchMap(currentCategory){
         category -> when(category){
-            "all" -> dataSource.getAllTasks()
+            "All" -> dataSource.getAllTasks()
             else -> dataSource.getTasksInCategory(category)
         }
     }
 
     private val workManager = WorkManager.getInstance(application)
+
+    private val _categories = MutableLiveData<ArrayList<String>>()
+    val categories: LiveData<ArrayList<String>>
+        get() = _categories
+
+    init {
+        addCategory("First")
+        addCategory("Second")
+        addCategory("Third")
+    }
 
     fun insert(taskTitle: String?, taskDueTime: Long?, taskCategory: String?){
         if(taskTitle == null || taskDueTime == null || taskCategory == null){
@@ -70,6 +80,10 @@ class TaskListViewModel (
             .setInputData(data.build())
             .build()
         workManager.enqueue(request)
+    }
+
+    fun addCategory(newCategory: String){
+        _categories.value?.add(newCategory)
     }
 
 }
