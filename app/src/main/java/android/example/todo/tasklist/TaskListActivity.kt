@@ -2,6 +2,7 @@ package android.example.todo.tasklist
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Resources
 import android.example.todo.R
 import android.example.todo.addtask.AddTask
 import android.example.todo.addtask.TASK_CATEGORY
@@ -9,17 +10,23 @@ import android.example.todo.addtask.TASK_DUE_TIME
 import android.example.todo.addtask.TASK_TITLE
 import android.example.todo.database.Task
 import android.example.todo.database.TaskDatabase
+import android.example.todo.database.TaskDatabaseDao
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 
 
@@ -29,7 +36,10 @@ class TaskListActivity : AppCompatActivity() {
 
     private val NEW_TASK_RC = 1
 
-    private lateinit var taskViewModel: TaskListViewModel
+    private lateinit var mDataSource: TaskDatabaseDao
+    private lateinit var mTaskViewModel: TaskListViewModel
+    private lateinit var mTaskAdapter: TaskAdapter
+    private lateinit var mRecyclerView: RecyclerView
 
     private lateinit var mDrawer: DrawerLayout
     private lateinit var toolbar: Toolbar
@@ -66,21 +76,21 @@ class TaskListActivity : AppCompatActivity() {
         mDrawer.addDrawerListener(drawerToggle);
 
 
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        mRecyclerView = findViewById(R.id.recycler_view)
 
-        val dataSource = TaskDatabase.getInstance(this).taskDatabaseDao
+        mDataSource = TaskDatabase.getInstance(this).taskDatabaseDao
 
-        val viewModelFactory = TaskListViewModelFactory(application, dataSource)
+        val viewModelFactory = TaskListViewModelFactory(application, mDataSource)
 
-        taskViewModel = ViewModelProvider(this, viewModelFactory)
+        mTaskViewModel = ViewModelProvider(this, viewModelFactory)
             .get(TaskListViewModel::class.java)
 
-        val taskAdapter = TaskAdapter()
-        recyclerView.adapter = taskAdapter
+        mTaskAdapter = TaskAdapter()
+        mRecyclerView.adapter = mTaskAdapter
 
-        taskViewModel.tasks?.observe(this, {
+        mTaskViewModel.tasks?.observe(this, {
             it?.let {
-                taskAdapter.submitList(it as MutableList<Task>)
+                mTaskAdapter.submitList(it as MutableList<Task>)
                 Log.i(LOG_TAG, "tasks liveData change observed")
             }
         })
@@ -89,6 +99,47 @@ class TaskListActivity : AppCompatActivity() {
         fab.setOnClickListener {
             fabOnClick()
         }
+
+        setOnTouchItemHelper()
+    }
+
+    private fun setOnTouchItemHelper(){
+        /*
+         Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item.
+         An ItemTouchHelper enables touch behavior (like swipe and move) on each ViewHolder,
+         and uses callbacks to signal when a user is performing these actions.
+         */
+        ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            // Called when a user swipes left or right on a ViewHolder
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+
+                val position = viewHolder.adapterPosition
+                val builder = AlertDialog.Builder(this@TaskListActivity, android.R.style.Theme_Material_Light_Dialog)
+                builder.setTitle("Delete")
+                builder.setMessage("Are you sure to Delete the task?")
+
+                builder.setPositiveButton("Yes") { dialog, which ->
+                    mTaskViewModel.delete(position)
+                    Toast.makeText(applicationContext, "Task deleted", Toast.LENGTH_SHORT).show()
+                }
+
+                builder.setNegativeButton("No") { dialog, which ->
+                    Toast.makeText(applicationContext, "Task not deleted", Toast.LENGTH_SHORT).show()
+                }
+                builder.show()
+
+                mTaskAdapter.notifyItemChanged(position);
+            }
+        }).attachToRecyclerView(mRecyclerView)
     }
 
     private fun fabOnClick() {
@@ -105,8 +156,8 @@ class TaskListActivity : AppCompatActivity() {
                 val taskDueTime = intent.getLongExtra(TASK_DUE_TIME, 0)
                 val category = intent.getStringExtra(TASK_CATEGORY)
 
-                taskViewModel.insert(taskTitle, taskDueTime, category)
-                taskViewModel.createNotification(this, taskDueTime, taskTitle)
+                mTaskViewModel.insert(taskTitle, taskDueTime, category)
+                mTaskViewModel.createNotification(this, taskDueTime, taskTitle)
             }
         }
     }
@@ -146,7 +197,7 @@ class TaskListActivity : AppCompatActivity() {
 
         // Updates the tasks liveData variable with the lists in the selected
         // category
-        taskViewModel.setCategory(category)
+        mTaskViewModel.setCategory(category)
     }
 
 //    private fun setupDrawerContent(navigationView: NavigationView){

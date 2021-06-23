@@ -1,10 +1,7 @@
 package android.example.todo.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface TaskDatabaseDao {
@@ -39,4 +36,10 @@ interface TaskDatabaseDao {
      */
     @Query("DELETE FROM task_table")
     suspend fun clear()
+
+    /**
+     * Deletes the given task from the database
+     */
+    @Delete
+    suspend fun deleteTask(taskEntry: Task)
 }

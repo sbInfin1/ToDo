@@ -19,9 +19,12 @@ class TaskListViewModel (
 
     private val LOG_TAG = TaskListViewModel::class.qualifiedName
 
-    private val currentCategory = MutableLiveData<String>()
+    private val currentCategory = MutableLiveData<String>("all")
     val tasks: LiveData<List<Task>> = Transformations.switchMap(currentCategory){
-        categoty -> dataSource.getTasksInCategory(categoty)
+        category -> when(category){
+            "all" -> dataSource.getAllTasks()
+            else -> dataSource.getTasksInCategory(category)
+        }
     }
 
     private val workManager = WorkManager.getInstance(application)
@@ -34,6 +37,13 @@ class TaskListViewModel (
         viewModelScope.launch {
             val newTask = Task(title = taskTitle, dueTime = taskDueTime, category = taskCategory)
             dataSource.insert(newTask)
+        }
+    }
+
+    fun delete(position: Int){
+        viewModelScope.launch {
+            val tasks: List<Task> = tasks.value!!
+            dataSource.deleteTask(tasks[position])
         }
     }
 
