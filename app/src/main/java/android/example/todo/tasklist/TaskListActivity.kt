@@ -120,7 +120,8 @@ class TaskListActivity : AppCompatActivity() {
 //        items.add("Second")
 //        items.add("Third")
 
-        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val categorySet = sharedPref.getStringSet("categories", emptySet())
 
         if (categorySet != null) {
@@ -197,7 +198,8 @@ class TaskListActivity : AppCompatActivity() {
 
                 val categoriesSet: Set<String> = HashSet<String>(categories)
 
-                val sharedPref = getPreferences(Context.MODE_PRIVATE)
+                val sharedPref = getSharedPreferences(
+                    getString(R.string.preference_file_key), Context.MODE_PRIVATE)
                 with (sharedPref.edit()) {
                     putStringSet("categories", categoriesSet)
                     apply()

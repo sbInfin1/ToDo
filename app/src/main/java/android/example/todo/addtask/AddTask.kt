@@ -1,8 +1,10 @@
 package android.example.todo.addtask
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.example.todo.R
+import android.example.todo.tasklist.TaskListActivity
 import android.example.todo.util.DateTimeFormatterUtils
 import android.os.Bundle
 import android.widget.*
@@ -11,7 +13,6 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import java.time.format.DateTimeFormatter
 import kotlin.properties.Delegates
 
 const val TASK_TITLE = "task_title"
@@ -22,7 +23,7 @@ class AddTask : AppCompatActivity() {
 
     private lateinit var taskTitleEditText: EditText
     private lateinit var taskDueTimeEditText: EditText
-    private lateinit var categoryEditText: EditText
+    private lateinit var categoryTextView: AutoCompleteTextView
     private lateinit var dueTimeTextView: AutoCompleteTextView
     private lateinit var dueTimeTextInputLayout: TextInputLayout
 
@@ -30,19 +31,23 @@ class AddTask : AppCompatActivity() {
     private lateinit var dateTimeString: String
     private var dueTimeMilliseconds by Delegates.notNull<Long>()
 
+    private var categories: ArrayList<String> =  ArrayList<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_task)
 
         taskTitleEditText = findViewById(R.id.task_title_editText)
         //taskDueTimeEditText = findViewById(R.id.task_dueTime_editText)
-        categoryEditText = findViewById(R.id.task_category_editText)
+        categoryTextView = findViewById(R.id.task_category_textView)
         dueTimeTextView = findViewById(R.id.due_time_textView)
         dueTimeTextInputLayout = findViewById(R.id.task_dueTime_text_input)
 
         findViewById<Button>(R.id.done_button).setOnClickListener {
             addTask()
         }
+
+        populateTheCategoriesAutoCompleteTextView()
 
         val items = listOf("Option 1", "Option 2", "Option 3", "Option 4")
         val adapter = ArrayAdapter(this,
@@ -97,19 +102,33 @@ class AddTask : AppCompatActivity() {
 
         if(taskTitleEditText.text.isNullOrEmpty() ||
             //taskDueTimeEditText.text.isNullOrEmpty() ||
-            categoryEditText.text.isNullOrEmpty()){
+            categoryTextView.text.isNullOrEmpty()){
             setResult(Activity.RESULT_CANCELED, resultIntent)
         }
         else{
             val title = taskTitleEditText.text.toString()
             //val dueTime = DateTimeFormatterUtils.convertDateTimeToMillis(dateTimeString)
-            val category = categoryEditText.text.toString()
+            val category = categoryTextView.text.toString()
             resultIntent.putExtra(TASK_TITLE, title)
             resultIntent.putExtra(TASK_DUE_TIME, dueTimeMilliseconds)
             resultIntent.putExtra(TASK_CATEGORY, category)
             setResult(Activity.RESULT_OK, resultIntent)
         }
         finish()
+    }
+
+    fun populateTheCategoriesAutoCompleteTextView(){
+        val sharedPref = getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val categorySet = sharedPref.getStringSet("categories", emptySet())
+
+        if (categorySet != null) {
+            for (str in categorySet) categories.add(str)
+        }
+
+        val adapter = ArrayAdapter(this,
+            R.layout.dropdown_menu_time_list_item, categories)
+        categoryTextView.setAdapter(adapter)
     }
 
 }
