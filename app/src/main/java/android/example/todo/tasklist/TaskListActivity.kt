@@ -1,6 +1,7 @@
 package android.example.todo.tasklist
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.example.todo.R
 import android.example.todo.addtask.AddTask
@@ -16,13 +17,15 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
-import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -46,6 +49,8 @@ class TaskListActivity : AppCompatActivity() {
     private lateinit var drawerToggle: ActionBarDrawerToggle
 
     private lateinit var navDrawerAdapter: ArrayAdapter<String>
+
+    private var categories: ArrayList<String> = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,11 +115,19 @@ class TaskListActivity : AppCompatActivity() {
     }
 
     private fun attachAdapterForNavDrawerListView(){
-        val items: ArrayList<String> = ArrayList<String>()
-        items.add("First")
-        items.add("Second")
-        items.add("Third")
-        navDrawerAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items)
+//        val items: ArrayList<String> = ArrayList<String>()
+//        items.add("First")
+//        items.add("Second")
+//        items.add("Third")
+
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val categorySet = sharedPref.getStringSet("categories", emptySet())
+
+        if (categorySet != null) {
+            for (str in categorySet) categories.add(str)
+        }
+
+        navDrawerAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories)
         val listView: ListView = findViewById<View>(R.id.list_slidermenu) as ListView
         listView.setAdapter(navDrawerAdapter)
 
@@ -179,6 +192,16 @@ class TaskListActivity : AppCompatActivity() {
             builder.setView(input)
 
             builder.setPositiveButton("Add") { dialog, which ->
+                categories.add(input.text.toString())
+                navDrawerAdapter.notifyDataSetChanged()
+
+                val categoriesSet: Set<String> = HashSet<String>(categories)
+
+                val sharedPref = getPreferences(Context.MODE_PRIVATE)
+                with (sharedPref.edit()) {
+                    putStringSet("categories", categoriesSet)
+                    apply()
+                }
                 Toast.makeText(applicationContext, "New category added", Toast.LENGTH_SHORT).show()
             }
 
