@@ -57,6 +57,12 @@ class TaskListViewModel (
         }
     }
 
+    fun update(task: Task){
+        viewModelScope.launch {
+            dataSource.update(task)
+        }
+    }
+
     fun setCategory(category: String){
         currentCategory.value = category
     }

@@ -91,7 +91,7 @@ class TaskListActivity : AppCompatActivity() {
         mTaskViewModel = ViewModelProvider(this, viewModelFactory)
             .get(TaskListViewModel::class.java)
 
-        mTaskAdapter = TaskAdapter()
+        mTaskAdapter = TaskAdapter(mTaskViewModel)
         mRecyclerView.adapter = mTaskAdapter
 
         mTaskViewModel.tasks?.observe(this, {
@@ -282,6 +282,10 @@ class TaskListActivity : AppCompatActivity() {
 //        for (item in mTaskViewModel.categories.value!!) {
 //            menu.add(item)
 //        }
+    }
+
+    fun setOnClickListenerForTaskCheckbox(){
+
     }
 
 //    private fun setupDrawerContent(navigationView: NavigationView){

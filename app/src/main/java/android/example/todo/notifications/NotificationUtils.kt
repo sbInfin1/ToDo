@@ -45,25 +45,24 @@ object NotificationUtils {
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
-        val tickImage = BitmapFactory.decodeResource(
-            context.resources,
-            R.drawable.icon_checklist_2
-        )
-
-        val bigPicStyle = NotificationCompat.BigPictureStyle()
-            .bigPicture(tickImage)
-            .bigLargeIcon(null)
+//        val tickImage = BitmapFactory.decodeResource(
+//            context.resources,
+//            R.drawable.icon_checklist_2
+//        )
+//
+//        val bigPicStyle = NotificationCompat.BigPictureStyle()
+//            .bigPicture(tickImage)
+//            .bigLargeIcon(null)
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.icon_checklist_2)
+            .setSmallIcon(R.drawable.outline_done_outline_black_24)
             .setContentTitle("Task alert")
             .setContentText(messageBody)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-            .setLargeIcon(tickImage)
-            .setStyle(bigPicStyle)
+            //.setStyle(bigPicStyle)
 
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define

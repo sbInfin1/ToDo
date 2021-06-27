@@ -3,10 +3,15 @@ package android.example.todo.tasklist
 import android.content.Context
 import android.example.todo.R
 import android.example.todo.database.Task
+import android.example.todo.database.TaskDatabaseDao
 import android.example.todo.util.DateTimeFormatterUtils
+import android.graphics.Paint
+import android.service.autofill.Validators.not
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -14,7 +19,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class TaskAdapter:
+class TaskAdapter(val taskListViewModel: TaskListViewModel):
     ListAdapter<Task, TaskAdapter.ViewHolder>(TaskDiffCallback){
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -22,17 +27,28 @@ class TaskAdapter:
         val titleTextView: TextView
         val dueTimeTextView: TextView
         val categoryTextView: TextView
+        val taskDoneCheckBox: CheckBox
 
         init {
             titleTextView = view.findViewById(R.id.task_title_textView)
             dueTimeTextView = view.findViewById(R.id.due_time_textView)
             categoryTextView = view.findViewById(R.id.category_textView)
+            taskDoneCheckBox = view.findViewById(R.id.todoCheckBox)
         }
 
         fun bind(task: Task){
             titleTextView.text = task.title
             dueTimeTextView.text = DateTimeFormatterUtils.convertMillisToDateTime(task.dueTime)
             categoryTextView.text = task.category
+
+            if(task.checked){
+                titleTextView.paintFlags = titleTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                taskDoneCheckBox.isChecked = true
+            }
+            else {
+                titleTextView.paintFlags = titleTextView.paintFlags and (Paint.STRIKE_THRU_TEXT_FLAG).inv()
+                taskDoneCheckBox.isChecked = false
+            }
         }
     }
 
@@ -56,6 +72,20 @@ class TaskAdapter:
         // contents of the view with that element
         val task = getItem(position)
         holder.bind(task)
+
+        holder.taskDoneCheckBox.setOnClickListener {
+            val updatedTask: Task = task
+                if(holder.taskDoneCheckBox.isChecked){
+                    holder.titleTextView.paintFlags = holder.titleTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    updatedTask.checked = true
+                    taskListViewModel.update(updatedTask)
+                }
+                else {
+                    holder.titleTextView.paintFlags = holder.titleTextView.paintFlags and (Paint.STRIKE_THRU_TEXT_FLAG).inv()
+                    updatedTask.checked = false
+                    taskListViewModel.update(updatedTask)
+                }
+        }
 
         // click listener for long-click on any item, for deleting
 //        holder.itemView.setOnLongClickListener {

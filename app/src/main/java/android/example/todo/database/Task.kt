@@ -26,5 +26,8 @@ data class Task(
     var priotity: Int = 0,
 
     @ColumnInfo(name = "column_category")
-    var category: String = "General"
+    var category: String = "General",
+
+    @ColumnInfo(name = "column_checked")
+    var checked: Boolean = false
 )
