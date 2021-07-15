@@ -8,6 +8,7 @@ import android.example.todo.addtask.AddTask
 import android.example.todo.addtask.TASK_CATEGORY
 import android.example.todo.addtask.TASK_DUE_TIME
 import android.example.todo.addtask.TASK_TITLE
+import android.example.todo.addtask.TASK_ID
 import android.example.todo.database.Task
 import android.example.todo.database.TaskDatabase
 import android.example.todo.database.TaskDatabaseDao
@@ -17,15 +18,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -91,7 +90,8 @@ class TaskListActivity : AppCompatActivity() {
         mTaskViewModel = ViewModelProvider(this, viewModelFactory)
             .get(TaskListViewModel::class.java)
 
-        mTaskAdapter = TaskAdapter(mTaskViewModel)
+        initializeTaskAdapter()
+
         mRecyclerView.adapter = mTaskAdapter
 
         mTaskViewModel.tasks?.observe(this, {
@@ -139,6 +139,33 @@ class TaskListActivity : AppCompatActivity() {
             //Toast.LENGTH_SHORT).show()
             mTaskViewModel.setCategory(listView.getItemAtPosition(position).toString())
             mDrawer.closeDrawers()
+        }
+    }
+
+    private fun initializeTaskAdapter(){
+
+        var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                val taskId = intent?.getLongExtra(TASK_ID, 0)
+                val taskTitle = intent?.getStringExtra(TASK_TITLE)
+                val taskDueTime = intent?.getLongExtra(TASK_DUE_TIME, 0)
+                val category = intent?.getStringExtra(TASK_CATEGORY)
+
+                val newTask = Task(taskId = taskId!!, title = taskTitle!!, dueTime = taskDueTime!!, category = category!!)
+
+                mTaskViewModel.update(newTask)
+                mTaskViewModel.createNotification(this, taskDueTime, taskTitle)
+            }
+        }
+
+        mTaskAdapter = TaskAdapter(mTaskViewModel){ task ->
+            val intent = Intent(this, AddTask::class.java)
+            intent.putExtra(TASK_ID, task.taskId)
+            intent.putExtra(TASK_TITLE, task.title)
+            intent.putExtra(TASK_DUE_TIME, task.dueTime)
+            intent.putExtra(TASK_CATEGORY, task.category)
+            resultLauncher.launch(intent)
         }
     }
 

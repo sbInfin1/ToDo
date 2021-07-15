@@ -1,7 +1,10 @@
 package android.example.todo.tasklist
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.example.todo.R
+import android.example.todo.addtask.AddTask
 import android.example.todo.database.Task
 import android.example.todo.database.TaskDatabaseDao
 import android.example.todo.util.DateTimeFormatterUtils
@@ -14,12 +17,15 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class TaskAdapter(val taskListViewModel: TaskListViewModel):
+class TaskAdapter(private val taskListViewModel: TaskListViewModel,
+                    private val listener: (Task) -> Unit):
     ListAdapter<Task, TaskAdapter.ViewHolder>(TaskDiffCallback){
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -86,6 +92,18 @@ class TaskAdapter(val taskListViewModel: TaskListViewModel):
                     taskListViewModel.update(updatedTask)
                 }
         }
+
+        holder.itemView.setOnClickListener {
+            listener(task)
+        }
+
+//        holder.itemView.setOnClickListener {
+//            val intent = Intent(context, AddTask::class.java)
+//            intent.putExtra("taskTitle", task.title)
+//            intent.putExtra("taskDueTime", task.dueTime)
+//            intent.putExtra("taskCategory", task.category)
+//            context.startActivity(intent)
+//        }
 
         // click listener for long-click on any item, for deleting
 //        holder.itemView.setOnLongClickListener {

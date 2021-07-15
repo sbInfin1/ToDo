@@ -8,6 +8,8 @@ import android.example.todo.tasklist.TaskListActivity
 import android.example.todo.util.DateTimeFormatterUtils
 import android.os.Bundle
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
@@ -18,6 +20,7 @@ import kotlin.properties.Delegates
 const val TASK_TITLE = "task_title"
 const val TASK_DUE_TIME = "task_due_time"
 const val TASK_CATEGORY = "task_category"
+const val TASK_ID = "task_id"
 
 class AddTask : AppCompatActivity() {
 
@@ -33,6 +36,8 @@ class AddTask : AppCompatActivity() {
 
     private var categories: ArrayList<String> =  ArrayList<String>()
 
+    private var taskId by Delegates.notNull<Long>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_task)
@@ -42,6 +47,23 @@ class AddTask : AppCompatActivity() {
         categoryTextView = findViewById(R.id.task_category_textView)
         dueTimeTextView = findViewById(R.id.due_time_textView)
         dueTimeTextInputLayout = findViewById(R.id.task_dueTime_text_input)
+
+        taskId = -1
+
+        if(intent.hasExtra(TASK_ID)){
+            taskId = intent.getLongExtra(TASK_ID, -1)
+            val taskTitle = intent.getStringExtra(TASK_TITLE)
+            val taskDueTime = intent.getLongExtra(TASK_DUE_TIME, 0)
+            val taskCategory = intent.getStringExtra(TASK_CATEGORY)
+
+            taskTitleEditText.setText(taskTitle)
+            dueTimeTextView.setText(DateTimeFormatterUtils.convertMillisToDateTime(taskDueTime))
+            categoryTextView.setText(taskCategory)
+            title = "Edit Task"
+        }
+        else{
+            title = "Add Task"
+        }
 
         findViewById<Button>(R.id.done_button).setOnClickListener {
             addTask()
@@ -109,6 +131,7 @@ class AddTask : AppCompatActivity() {
             val title = taskTitleEditText.text.toString()
             //val dueTime = DateTimeFormatterUtils.convertDateTimeToMillis(dateTimeString)
             val category = categoryTextView.text.toString()
+            resultIntent.putExtra(TASK_ID, taskId)
             resultIntent.putExtra(TASK_TITLE, title)
             resultIntent.putExtra(TASK_DUE_TIME, dueTimeMilliseconds)
             resultIntent.putExtra(TASK_CATEGORY, category)
