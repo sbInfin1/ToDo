@@ -155,7 +155,7 @@ class TaskListActivity : AppCompatActivity() {
                 val newTask = Task(taskId = taskId!!, title = taskTitle!!, dueTime = taskDueTime!!, category = category!!)
 
                 mTaskViewModel.update(newTask)
-                mTaskViewModel.createNotification(this, taskDueTime, taskTitle)
+                mTaskViewModel.createNotification(this, taskId)
             }
         }
 
@@ -255,8 +255,8 @@ class TaskListActivity : AppCompatActivity() {
                 val taskDueTime = intent.getLongExtra(TASK_DUE_TIME, 0)
                 val category = intent.getStringExtra(TASK_CATEGORY)
 
-                mTaskViewModel.insert(taskTitle, taskDueTime, category)
-                mTaskViewModel.createNotification(this, taskDueTime, taskTitle)
+                mTaskViewModel.insert(this, taskTitle, taskDueTime, category)
+//                mTaskViewModel.createNotification(this, taskId)
             }
         }
     }

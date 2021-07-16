@@ -85,11 +85,20 @@ class TaskAdapter(private val taskListViewModel: TaskListViewModel,
                     holder.titleTextView.paintFlags = holder.titleTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                     updatedTask.checked = true
                     taskListViewModel.update(updatedTask)
+                    taskListViewModel.cancelNotification(context, updatedTask.title)
                 }
                 else {
-                    holder.titleTextView.paintFlags = holder.titleTextView.paintFlags and (Paint.STRIKE_THRU_TEXT_FLAG).inv()
-                    updatedTask.checked = false
-                    taskListViewModel.update(updatedTask)
+                    val res = System.currentTimeMillis() > updatedTask.dueTime
+//                    val res = taskListViewModel.createNotification(context, updatedTask.taskId)
+                    if(res){
+                        Toast.makeText(context, "Task due time is behind the current time", Toast.LENGTH_SHORT).show()
+                        holder.taskDoneCheckBox.isChecked = true
+                    }
+                    else{
+                        holder.titleTextView.paintFlags = holder.titleTextView.paintFlags and (Paint.STRIKE_THRU_TEXT_FLAG).inv()
+                        updatedTask.checked = false
+                        taskListViewModel.update(updatedTask)
+                    }
                 }
         }
 

@@ -7,7 +7,7 @@ import androidx.room.*
 interface TaskDatabaseDao {
 
     @Insert
-    suspend fun insert(task: Task)
+    suspend fun insert(task: Task): Long
 
     @Update
     suspend fun update(task: Task)

@@ -6,6 +6,7 @@ import android.example.todo.database.Task
 import android.example.todo.database.TaskDatabaseDao
 import android.example.todo.notifications.NotificationUtils
 import android.example.todo.notifications.NotificationWorker
+import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
@@ -39,14 +40,15 @@ class TaskListViewModel (
         addCategory("Third")
     }
 
-    fun insert(taskTitle: String?, taskDueTime: Long?, taskCategory: String?){
+    fun insert(context: Context, taskTitle: String?, taskDueTime: Long?, taskCategory: String?){
         if(taskTitle == null || taskDueTime == null || taskCategory == null){
             return
         }
 
         viewModelScope.launch {
             val newTask = Task(title = taskTitle, dueTime = taskDueTime, category = taskCategory)
-            dataSource.insert(newTask)
+            val taskId = dataSource.insert(newTask)
+            createNotification(context, taskId)
         }
     }
 
@@ -67,25 +69,34 @@ class TaskListViewModel (
         currentCategory.value = category
     }
 
-    internal fun createNotification(context: Context, taskDueTime: Long?, taskTitle: String?) {
+    internal fun createNotification(context: Context, taskId: Long) {
 
-//        val delayTimeInSeconds: Long = 15
-//        val delayedTime = TimeUnit.SECONDS.toMillis(delayTimeInSeconds)
+        viewModelScope.launch {
+            val task = dataSource.getTask(taskId = taskId)!!
+            val taskTitle = task.title
+            val taskDueTime = task.dueTime
 
-        NotificationUtils.createNotificationChannel(context)
+            NotificationUtils.createNotificationChannel(context)
 
-        val currentTimeInMillis = System.currentTimeMillis()
-        val delayedTime = (taskDueTime?.minus(currentTimeInMillis)!!)
+            val currentTimeInMillis = System.currentTimeMillis()
 
-        val data = Data.Builder()
-        data.putString("taskTitle", taskTitle)
+            val delayedTime = (taskDueTime?.minus(currentTimeInMillis)!!)
 
-        val request = OneTimeWorkRequest.Builder(NotificationWorker::class.java)
-            .setInitialDelay(delayedTime, TimeUnit.MILLISECONDS)
-            .addTag("TAG")
-            .setInputData(data.build())
-            .build()
-        workManager.enqueue(request)
+            val data = Data.Builder()
+            data.putLong("taskId", taskId)
+
+            val request = OneTimeWorkRequest.Builder(NotificationWorker::class.java)
+                .setInitialDelay(delayedTime, TimeUnit.MILLISECONDS)
+                .addTag(taskTitle!!)
+                .setInputData(data.build())
+                .build()
+            workManager.enqueue(request)
+        }
+    }
+
+    fun cancelNotification(context: Context, taskTitle: String?){
+        workManager.cancelAllWorkByTag(taskTitle!!)
+        Toast.makeText(context, "Scheduled Notification cancelled", Toast.LENGTH_SHORT).show()
     }
 
     fun addCategory(newCategory: String){
