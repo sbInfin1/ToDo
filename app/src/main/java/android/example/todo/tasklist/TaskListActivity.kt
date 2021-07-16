@@ -28,6 +28,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 
 
@@ -189,7 +190,8 @@ class TaskListActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
 
                 val position = viewHolder.adapterPosition
-                val builder = AlertDialog.Builder(this@TaskListActivity, android.R.style.Theme_Material_Light_Dialog)
+
+                val builder = MaterialAlertDialogBuilder(this@TaskListActivity)
                 builder.setTitle("Delete")
                 builder.setMessage("Are you sure to Delete the task?")
 
@@ -212,7 +214,7 @@ class TaskListActivity : AppCompatActivity() {
         val manageCategoriesButton = findViewById<Button>(R.id.button_manage_categories)
 
         manageCategoriesButton.setOnClickListener {
-            val builder = AlertDialog.Builder(this@TaskListActivity, android.R.style.Theme_Material_Light_Dialog)
+            val builder = MaterialAlertDialogBuilder(this@TaskListActivity)
             builder.setTitle("New Category")
             builder.setMessage("Enter the label of the new category")
 
