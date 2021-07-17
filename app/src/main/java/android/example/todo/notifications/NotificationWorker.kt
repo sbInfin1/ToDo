@@ -35,7 +35,7 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Worker(co
 
             withContext(Dispatchers.Main){
                 val taskTitle = task.title
-                NotificationUtils.triggerNotification(applicationContext, taskTitle)
+                NotificationUtils.triggerNotification(applicationContext, taskTitle, taskId)
             }
         }
 

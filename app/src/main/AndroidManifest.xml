@@ -22,6 +22,8 @@
             android:name=".addtask.AddTask"
             android:theme="@style/Theme.ToDoAddTask"
             />
+
+        <receiver android:name=".notifications.SnoozeReceiver"/>
     </application>
 
 </manifest>

@@ -18,7 +18,8 @@ object NotificationUtils {
 
     private const val CHANNEL_ID = "notification_channel_id"
 
-    private const val notificationId = 76
+    const val notificationId = 76
+    const val NOTIFICATION_ID = "notificationId"
 
     fun createNotificationChannel(context: Context) {
         // Create the NotificationChannel, but only on API 26+ because
@@ -38,12 +39,24 @@ object NotificationUtils {
         }
     }
 
-    fun triggerNotification(context: Context, messageBody: String){
+    fun triggerNotification(context: Context, messageBody: String, taskId: Long){
         // Create an explicit intent for an Activity in your app
         val intent = Intent(context, TaskListActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
+        val snoozeIntent = Intent(context, SnoozeReceiver::class.java).apply{
+            putExtra("taskId", taskId)
+            putExtra(NOTIFICATION_ID, notificationId)
+        }
+//        snoozeIntent.putExtra("taskId", taskId)
+        val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            snoozeIntent,
+            0
+        )
 
 //        val tickImage = BitmapFactory.decodeResource(
 //            context.resources,
@@ -62,7 +75,10 @@ object NotificationUtils {
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-            //.setStyle(bigPicStyle)
+            .addAction(R.drawable.outline_done_outline_black_24,
+                context.getString(R.string.snooze),
+                snoozePendingIntent
+            )
 
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
