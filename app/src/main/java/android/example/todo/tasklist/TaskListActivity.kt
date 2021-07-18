@@ -18,6 +18,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -116,10 +117,6 @@ class TaskListActivity : AppCompatActivity() {
     }
 
     private fun attachAdapterForNavDrawerListView(){
-//        val items: ArrayList<String> = ArrayList<String>()
-//        items.add("First")
-//        items.add("Second")
-//        items.add("Third")
 
         val sharedPref = getSharedPreferences(
             getString(R.string.preference_file_key), Context.MODE_PRIVATE)
@@ -129,7 +126,7 @@ class TaskListActivity : AppCompatActivity() {
             for (str in categorySet) categories.add(str)
         }
 
-        navDrawerAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories)
+        navDrawerAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, categories)
         val listView: ListView = findViewById<View>(R.id.list_slidermenu) as ListView
         listView.setAdapter(navDrawerAdapter)
 
@@ -138,7 +135,27 @@ class TaskListActivity : AppCompatActivity() {
             //listView.setItemChecked(position, true)
             //Toast.makeText(this, "Item selected: " + listView.getItemAtPosition(position),
             //Toast.LENGTH_SHORT).show()
+//            if(listView.checkedItemPosition == position){
+//                listView.clearChoices()
+//                listView.requestLayout()
+//                mTaskViewModel.setCategory("All")
+//            }
+//            else{
+//                listView.setItemChecked(position, true)
+//                mTaskViewModel.setCategory(listView.getItemAtPosition(position).toString())
+//            }
+
+
+
             mTaskViewModel.setCategory(listView.getItemAtPosition(position).toString())
+            mDrawer.closeDrawers()
+        }
+
+        val showAllTasksButton = findViewById<Button>(R.id.show_all_tasks_button)
+        showAllTasksButton.setOnClickListener {
+            listView.clearChoices()
+            listView.requestLayout()
+            mTaskViewModel.setCategory("All")
             mDrawer.closeDrawers()
         }
     }

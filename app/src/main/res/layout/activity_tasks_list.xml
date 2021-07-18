@@ -63,22 +63,44 @@
 
             <include layout="@layout/nav_header" />
 
+            <Button
+                android:id="@+id/button_manage_categories"
+                android:text="@string/label_manage_categories"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                />
+
+            <Button
+                android:id="@+id/show_all_tasks_button"
+                android:text="@string/show_all_tasks_label"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:background="#c0c0c0"/>
+
             <ListView
                 android:id="@+id/list_slidermenu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:choiceMode="singleChoice"
-                android:listSelector="@drawable/list_selector"
-                android:textColor="#424242"/>
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:listSelector="@drawable/list_selector" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button_manage_categories"
-            android:text="@string/label_manage_categories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"/>
 
 <!--        <com.google.android.material.button.MaterialButton-->
 <!--            android:id="@+id/button_manage_categories"-->

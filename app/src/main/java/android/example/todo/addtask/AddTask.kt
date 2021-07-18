@@ -43,10 +43,12 @@ class AddTask : AppCompatActivity() {
         setContentView(R.layout.activity_add_task)
 
         taskTitleEditText = findViewById(R.id.task_title_editText)
-        //taskDueTimeEditText = findViewById(R.id.task_dueTime_editText)
+        taskDueTimeEditText = findViewById(R.id.task_dueTime_editText)
         categoryTextView = findViewById(R.id.task_category_textView)
-        dueTimeTextView = findViewById(R.id.due_time_textView)
+//        dueTimeTextView = findViewById(R.id.due_time_textView)
         dueTimeTextInputLayout = findViewById(R.id.task_dueTime_text_input)
+
+        taskDueTimeEditText.showSoftInputOnFocus = false
 
         taskId = -1
 
@@ -71,51 +73,46 @@ class AddTask : AppCompatActivity() {
 
         populateTheCategoriesAutoCompleteTextView()
 
-        val items = listOf("Option 1", "Option 2", "Option 3", "Option 4")
-        val adapter = ArrayAdapter(this,
-            R.layout.dropdown_menu_time_list_item, items)
-        dueTimeTextView.setAdapter(adapter)
-        //(textField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        taskDueTimeEditText.setOnFocusChangeListener { view, b ->
 
-        dueTimeTextInputLayout.setStartIconOnClickListener {
+            if(view.hasFocus()){
+                var date: Long
+                var newHour: Int
+                var newMinute: Int
 
-            var date: Long
-            var newHour: Int
-            var newMinute: Int
+                val datePicker =
+                    MaterialDatePicker.Builder.datePicker()
+                        .setTitleText("Select date")
+                        .build()
 
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select date")
-                    .build()
+                val timePicker =
+                    MaterialTimePicker.Builder()
+                        .setTimeFormat(TimeFormat.CLOCK_12H)
+                        .setHour(12)
+                        .setMinute(10)
+                        .setTitleText("Select due time")
+                        .build()
 
-            val timePicker =
-                MaterialTimePicker.Builder()
-                    .setTimeFormat(TimeFormat.CLOCK_12H)
-                    .setHour(12)
-                    .setMinute(10)
-                    .setTitleText("Select due time")
-                    .build()
+                datePicker.show(supportFragmentManager, "datePicker")
 
-            datePicker.show(supportFragmentManager, "datePicker")
+                datePicker.addOnPositiveButtonClickListener {
+                    date = datePicker.selection!!
+                    dateString = datePicker.headerText
+                    Toast.makeText(this, "Date: $dateString", Toast.LENGTH_SHORT).show()
+                    timePicker.show(supportFragmentManager, "Picker")
+                }
 
-            datePicker.addOnPositiveButtonClickListener {
-                date = datePicker.selection!!
-                dateString = datePicker.headerText
-                Toast.makeText(this, "Date: $dateString", Toast.LENGTH_SHORT).show()
-                timePicker.show(supportFragmentManager, "Picker")
+                timePicker.addOnPositiveButtonClickListener {
+                    newHour = timePicker.hour
+                    newMinute = timePicker.minute
+                    Toast.makeText(this, "Time: ${newHour}:${newMinute}", Toast.LENGTH_SHORT).show()
+
+                    dateTimeString = "$dateString $newHour:$newMinute"
+                    dueTimeMilliseconds = DateTimeFormatterUtils.convertDateTimeToMillis(dateTimeString)
+                    dateTimeString = DateTimeFormatterUtils.convertMillisToDateTime(dueTimeMilliseconds)
+                    taskDueTimeEditText.setText(dateTimeString)
+                }
             }
-
-            timePicker.addOnPositiveButtonClickListener {
-                newHour = timePicker.hour
-                newMinute = timePicker.minute
-                Toast.makeText(this, "Time: ${newHour}:${newMinute}", Toast.LENGTH_SHORT).show()
-
-                dateTimeString = "$dateString $newHour:$newMinute"
-                dueTimeMilliseconds = DateTimeFormatterUtils.convertDateTimeToMillis(dateTimeString)
-                dateTimeString = DateTimeFormatterUtils.convertMillisToDateTime(dueTimeMilliseconds)
-                dueTimeTextView.setText(dateTimeString)
-            }
-            //Toast.makeText(this, "Clock should appear here", Toast.LENGTH_SHORT).show()
         }
     }
 

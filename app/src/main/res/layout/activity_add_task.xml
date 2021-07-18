@@ -23,8 +23,7 @@
                 android:id="@+id/task_title_text_input"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/task_title_editText"
@@ -37,17 +36,17 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/task_dueTime_text_input"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:startIconDrawable="@drawable/outline_alarm_add_black_24"
-                android:hint="@string/hint_enter_task_dueTime">
+                android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
-                    android:id="@+id/due_time_textView"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/task_dueTime_editText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none" />
+                    android:inputType="none"
+                    android:focusedByDefault="true"
+                    android:hint="@string/hint_enter_task_dueTime" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,8 +71,7 @@
                 android:id="@+id/task_category_text_input"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
                     android:id="@+id/task_category_textView"
