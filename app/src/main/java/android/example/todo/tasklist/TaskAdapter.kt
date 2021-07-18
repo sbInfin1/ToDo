@@ -105,38 +105,6 @@ class TaskAdapter(private val taskListViewModel: TaskListViewModel,
         holder.itemView.setOnClickListener {
             listener(task)
         }
-
-//        holder.itemView.setOnClickListener {
-//            val intent = Intent(context, AddTask::class.java)
-//            intent.putExtra("taskTitle", task.title)
-//            intent.putExtra("taskDueTime", task.dueTime)
-//            intent.putExtra("taskCategory", task.category)
-//            context.startActivity(intent)
-//        }
-
-        // click listener for long-click on any item, for deleting
-//        holder.itemView.setOnLongClickListener {
-//            val builder = AlertDialog.Builder(context)
-//            builder.setTitle("Delete")
-//            builder.setMessage("Are you Sure To Delete?")
-//
-//            builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-//                Toast.makeText(context,
-//                    android.R.string.yes, Toast.LENGTH_SHORT).show()
-//            }
-//
-//            builder.setNegativeButton(android.R.string.no) { dialog, which ->
-//                Toast.makeText(context,
-//                    android.R.string.no, Toast.LENGTH_SHORT).show()
-//            }
-//
-////            builder.setNeutralButton("Maybe") { dialog, which ->
-////                Toast.makeText(context,
-////                    "Maybe", Toast.LENGTH_SHORT).show()
-////            }
-//            builder.show()
-//            false
-//        }
     }
 }
 

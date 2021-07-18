@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 class TaskListViewModel (
-    val application: Application,
-    val dataSource: TaskDatabaseDao) : ViewModel() {
+    private val application: Application,
+    private val dataSource: TaskDatabaseDao) : ViewModel() {
 
     private val LOG_TAG = TaskListViewModel::class.qualifiedName
 
@@ -29,16 +29,6 @@ class TaskListViewModel (
     }
 
     private val workManager = WorkManager.getInstance(application)
-
-    private val _categories = MutableLiveData<ArrayList<String>>()
-    val categories: LiveData<ArrayList<String>>
-        get() = _categories
-
-    init {
-        addCategory("First")
-        addCategory("Second")
-        addCategory("Third")
-    }
 
     fun insert(context: Context, taskTitle: String?, taskDueTime: Long?, taskCategory: String?){
         if(taskTitle == null || taskDueTime == null || taskCategory == null){
@@ -98,9 +88,4 @@ class TaskListViewModel (
         workManager.cancelAllWorkByTag(taskTitle!!)
         Toast.makeText(context, "Scheduled Notification cancelled", Toast.LENGTH_SHORT).show()
     }
-
-    fun addCategory(newCategory: String){
-        _categories.value?.add(newCategory)
-    }
-
 }

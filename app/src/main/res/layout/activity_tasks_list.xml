@@ -101,15 +101,6 @@
 
         </LinearLayout>
 
-
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/button_manage_categories"-->
-<!--            style="@style/Widget.MaterialComponents.Button"-->
-<!--            android:text="@string/label_manage_categories"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:gravity="bottom"/>-->
-
     </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

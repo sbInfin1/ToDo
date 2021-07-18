@@ -51,22 +51,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                android:id="@+id/task_dueTime_text_input"-->
-<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:errorEnabled="true">-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/task_dueTime_editText"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:inputType="number"-->
-<!--                    android:hint="@string/hint_enter_task_dueTime" />-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/task_category_text_input"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -80,12 +64,6 @@
                     android:inputType="none"
                     android:hint="@string/hint_category"/>
 
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/task_category_editText"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:inputType="text"-->
-<!--                    android:hint="@string/hint_category" />-->
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -101,73 +79,4 @@
     </com.google.android.material.card.MaterialCardView>
 </ScrollView>
 
-
-
-
-
-
-
-
-<!--<LinearLayout-->
-<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:orientation="vertical"-->
-<!--    tools:context=".addtask.AddTask">-->
-
-<!--&lt;!&ndash;    <com.google.android.material.textfield.TextInputLayout&ndash;&gt;-->
-<!--&lt;!&ndash;        android:id="@+id/title_textInput"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;        >&ndash;&gt;-->
-
-<!--    <com.google.android.material.textfield.TextInputEditText-->
-<!--        android:id="@+id/task_title_editText"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:hint="@string/hint_enter_task_title"-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--        />-->
-
-
-<!--&lt;!&ndash;    <EditText&ndash;&gt;-->
-<!--&lt;!&ndash;        android:id="@+id/task_title_editText"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_width="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_marginTop="80dp"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:hint="@string/hint_enter_task_title"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        tools:layout_editor_absoluteX="152dp" />&ndash;&gt;-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/task_dueTime_editText"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:ems="10"-->
-<!--        android:hint="@string/hint_enter_task_dueTime"-->
-<!--        android:inputType="number"-->
-<!--        tools:layout_editor_absoluteX="176dp" />-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/task_category_editText"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:ems="10"-->
-<!--        android:hint="@string/hint_category"-->
-<!--        android:inputType="text"-->
-<!--        tools:layout_editor_absoluteX="176dp" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/done_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="24dp"-->
-<!--        android:text="Done"-->
-<!--        tools:layout_editor_absoluteY="330dp" />-->
-
-<!--</LinearLayout>-->
 

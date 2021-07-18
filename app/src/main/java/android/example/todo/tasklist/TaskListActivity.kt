@@ -72,8 +72,10 @@ class TaskListActivity : AppCompatActivity() {
 
         //setupDrawerContent(nvDrawer)
 
-        drawerToggle = ActionBarDrawerToggle(this, mDrawer, toolbar,
-            R.string.drawer_open, R.string.drawer_closed)
+        drawerToggle = ActionBarDrawerToggle(
+            this, mDrawer, toolbar,
+            R.string.drawer_open, R.string.drawer_closed
+        )
 
         // Setup toggle to display hamburger icon with nice animation
         drawerToggle.isDrawerIndicatorEnabled = true
@@ -116,36 +118,23 @@ class TaskListActivity : AppCompatActivity() {
         setOnClickListenerForManageCategories()
     }
 
-    private fun attachAdapterForNavDrawerListView(){
+    private fun attachAdapterForNavDrawerListView() {
 
         val sharedPref = getSharedPreferences(
-            getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE
+        )
         val categorySet = sharedPref.getStringSet("categories", emptySet())
 
         if (categorySet != null) {
             for (str in categorySet) categories.add(str)
         }
 
-        navDrawerAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, categories)
+        navDrawerAdapter =
+            ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, categories)
         val listView: ListView = findViewById<View>(R.id.list_slidermenu) as ListView
         listView.setAdapter(navDrawerAdapter)
 
         listView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-            //listView.setSelection(position)
-            //listView.setItemChecked(position, true)
-            //Toast.makeText(this, "Item selected: " + listView.getItemAtPosition(position),
-            //Toast.LENGTH_SHORT).show()
-//            if(listView.checkedItemPosition == position){
-//                listView.clearChoices()
-//                listView.requestLayout()
-//                mTaskViewModel.setCategory("All")
-//            }
-//            else{
-//                listView.setItemChecked(position, true)
-//                mTaskViewModel.setCategory(listView.getItemAtPosition(position).toString())
-//            }
-
-
 
             mTaskViewModel.setCategory(listView.getItemAtPosition(position).toString())
             mDrawer.closeDrawers()
@@ -160,24 +149,30 @@ class TaskListActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializeTaskAdapter(){
+    private fun initializeTaskAdapter() {
 
-        var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val intent = result.data
-                val taskId = intent?.getLongExtra(TASK_ID, 0)
-                val taskTitle = intent?.getStringExtra(TASK_TITLE)
-                val taskDueTime = intent?.getLongExtra(TASK_DUE_TIME, 0)
-                val category = intent?.getStringExtra(TASK_CATEGORY)
+        var resultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val intent = result.data
+                    val taskId = intent?.getLongExtra(TASK_ID, 0)
+                    val taskTitle = intent?.getStringExtra(TASK_TITLE)
+                    val taskDueTime = intent?.getLongExtra(TASK_DUE_TIME, 0)
+                    val category = intent?.getStringExtra(TASK_CATEGORY)
 
-                val newTask = Task(taskId = taskId!!, title = taskTitle!!, dueTime = taskDueTime!!, category = category!!)
+                    val newTask = Task(
+                        taskId = taskId!!,
+                        title = taskTitle!!,
+                        dueTime = taskDueTime!!,
+                        category = category!!
+                    )
 
-                mTaskViewModel.update(newTask)
-                mTaskViewModel.createNotification(this, taskId)
+                    mTaskViewModel.update(newTask)
+                    mTaskViewModel.createNotification(this, taskId)
+                }
             }
-        }
 
-        mTaskAdapter = TaskAdapter(mTaskViewModel){ task ->
+        mTaskAdapter = TaskAdapter(mTaskViewModel) { task ->
             val intent = Intent(this, AddTask::class.java)
             intent.putExtra(TASK_ID, task.taskId)
             intent.putExtra(TASK_TITLE, task.title)
@@ -187,7 +182,7 @@ class TaskListActivity : AppCompatActivity() {
         }
     }
 
-    private fun setOnTouchItemHelper(){
+    private fun setOnTouchItemHelper() {
         /*
          Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item.
          An ItemTouchHelper enables touch behavior (like swipe and move) on each ViewHolder,
@@ -218,7 +213,8 @@ class TaskListActivity : AppCompatActivity() {
                 }
 
                 builder.setNegativeButton("No") { dialog, which ->
-                    Toast.makeText(applicationContext, "Task not deleted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Task not deleted", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 builder.show()
 
@@ -227,7 +223,7 @@ class TaskListActivity : AppCompatActivity() {
         }).attachToRecyclerView(mRecyclerView)
     }
 
-    private fun setOnClickListenerForManageCategories(){
+    private fun setOnClickListenerForManageCategories() {
         val manageCategoriesButton = findViewById<Button>(R.id.button_manage_categories)
 
         manageCategoriesButton.setOnClickListener {
@@ -245,8 +241,9 @@ class TaskListActivity : AppCompatActivity() {
                 val categoriesSet: Set<String> = HashSet<String>(categories)
 
                 val sharedPref = getSharedPreferences(
-                    getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-                with (sharedPref.edit()) {
+                    getString(R.string.preference_file_key), Context.MODE_PRIVATE
+                )
+                with(sharedPref.edit()) {
                     putStringSet("categories", categoriesSet)
                     apply()
                 }
@@ -254,7 +251,8 @@ class TaskListActivity : AppCompatActivity() {
             }
 
             builder.setNegativeButton("Cancel") { dialog, which ->
-                Toast.makeText(applicationContext, "Category was not added", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Category was not added", Toast.LENGTH_SHORT)
+                    .show()
             }
             builder.show()
         }
@@ -268,8 +266,8 @@ class TaskListActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == NEW_TASK_RC && resultCode == Activity.RESULT_OK){
-            data?.let{ intent ->
+        if (requestCode == NEW_TASK_RC && resultCode == Activity.RESULT_OK) {
+            data?.let { intent ->
                 val taskTitle = intent.getStringExtra(TASK_TITLE)
                 val taskDueTime = intent.getLongExtra(TASK_DUE_TIME, 0)
                 val category = intent.getStringExtra(TASK_CATEGORY)
@@ -302,7 +300,7 @@ class TaskListActivity : AppCompatActivity() {
 
     private fun selectDrawerItem(menuItem: MenuItem) {
 
-        var category: String = when(menuItem.itemId){
+        var category: String = when (menuItem.itemId) {
             R.id.nav_first_fragment -> "First"
             R.id.nav_second_fragment -> "Second"
             R.id.nav_third_fragment -> "Third"
@@ -317,26 +315,4 @@ class TaskListActivity : AppCompatActivity() {
         // category
         mTaskViewModel.setCategory(category)
     }
-
-    private fun populateNavDrawer(){
-        val menu = nvDrawer.menu
-
-        menu.add("First")
-        menu.add("Second")
-        menu.add("Third")
-
-//        for (item in mTaskViewModel.categories.value!!) {
-//            menu.add(item)
-//        }
-    }
-
-    fun setOnClickListenerForTaskCheckbox(){
-
-    }
-
-//    private fun setupDrawerContent(navigationView: NavigationView){
-//        navigationView.setNavigationItemSelectedListener {
-//            NavigationView.OnNavigationItemSelectedListener {  }
-//        }
-//    }
 }

@@ -105,7 +105,7 @@ class AddTask : AppCompatActivity() {
                 timePicker.addOnPositiveButtonClickListener {
                     newHour = timePicker.hour
                     newMinute = timePicker.minute
-                    Toast.makeText(this, "Time: ${newHour}:${newMinute}", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "Time: ${newHour}:${newMinute}", Toast.LENGTH_SHORT).show()
 
                     dateTimeString = "$dateString $newHour:$newMinute"
                     dueTimeMilliseconds = DateTimeFormatterUtils.convertDateTimeToMillis(dateTimeString)
