@@ -34,7 +34,7 @@ class SnoozeReceiver: BroadcastReceiver() {
             val taskId = intent.getLongExtra("taskId", 0)
             val task = dataSource.getTask(taskId = taskId)!!
             val taskTitle = task.title
-            task.dueTime += 2*DateUtils.MINUTE_IN_MILLIS
+            task.dueTime = System.currentTimeMillis() + 2*DateUtils.MINUTE_IN_MILLIS
             val taskDueTime = task.dueTime
             task.checked = false
             dataSource.update(task)

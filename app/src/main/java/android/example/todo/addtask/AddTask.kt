@@ -59,7 +59,8 @@ class AddTask : AppCompatActivity() {
             val taskCategory = intent.getStringExtra(TASK_CATEGORY)
 
             taskTitleEditText.setText(taskTitle)
-            dueTimeTextView.setText(DateTimeFormatterUtils.convertMillisToDateTime(taskDueTime))
+            taskDueTimeEditText.setText(DateTimeFormatterUtils.convertMillisToDateTime(taskDueTime))
+            dueTimeMilliseconds = taskDueTime
             categoryTextView.setText(taskCategory)
             title = "Edit Task"
         }
